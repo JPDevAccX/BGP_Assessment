@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Load the JS (as regular but deffered scripts as modules won't work with file:// protocol) -->
+	<script src="js/main.js" defer></script>
+	<script src="js/validation.js" defer></script>
+	<script src="js/signup.js" defer></script>
+
+	<!-- Load the CSS -->
+	<link rel="stylesheet" href="styles/colors.css">
+	<link rel="stylesheet" href="styles/main.css">
+	<link rel="stylesheet" href="styles/forms.css">
+
+	<title>Sign up</title>
+</head>
+
+<body>
+	<!-- HEADER -->
+	<header>
+		<!-- HEADER TOP -->
+		<div class="header-top">
+			<div class="header-logo">
+				<img src="images/jean_victor_balin_ill_house_02.svg" alt="company logo">
+				<div class="header-logo-text">
+					Blue House Plants
+				</div>
+			</div>
+			<div class="search-bar">
+				<input placeholder="Search...">
+				<button type="button">
+					<img src="images/magnifying-glass-svgrepo-com.svg">
+				</button>
+			</div>
+			<div class="header-icons">
+				<button type="button" title="Account">
+					<img src="images/account-customize-man-svgrepo-com.svg" alt="account options icon">
+				</button>
+				<button type="button" title="Help">
+					<img src="images/help-svgrepo-com.svg" alt="help icon">
+				</button>
+			</div>
+		</div>
+
+		<!-- HEADER BOTTOM -->
+		<nav class="header-bottom">
+			<ul>
+				<li tabindex="0">Seasonal</li>
+				<li tabindex="0">New</li>
+				<li tabindex="0">Offers</li>
+				<li tabindex="0">Favourites</li>
+				<li tabindex="0">Bulk Orders</li>
+			</ul>
+		</nav>
+	</header>
+	<!-- END HEADER -->
+
+	<!-- MAIN BODY CONTENT -->
+	<main>
+		<form class="form">
+			<h1>Create account</h1>
+			<div class="form-field">
+				<label for="form_name">Name</label>
+				<input id="form_name" name="name" placeholder="Joe Smith">
+			</div>
+			<div class="form-field">
+				<label for="form_email">Email Address</label>
+				<div class="input-wrapper">
+					<input type="email" id="form_email" name="email" placeholder="me@gmail.com, me@outlook.com"
+						title="Please enter your Gmail or Outlook email address" data-validationerror="Invalid email address">
+					<div class="validation-error"></div>
+				</div>
+			</div>
+			<div class="form-field">
+				<label for="form_phone">Phone</label>
+				<div class="input-wrapper">
+					<input type="tel" pattern="[ 0-9]*" id="form_phone" name="phone" placeholder="01234 567890"
+						title="Please enter your phone number (digits only, max length 11)"
+						data-validationerror="Number may contain only digits">
+					<div class="validation-error"></div>
+				</div>
+			</div>
+			<div class="form-field">
+				<label for="form_postcode">Postcode</label>
+				<input id="form_postcode" placeholder="A1 2BC" name="postcode">
+			</div>
+		</form>
+
+		<button class="form-submit-button" type="button">Submit</button>
+	</main>
+	<!-- END MAIN BODY CONTENT -->
+
+	<!-- FOOTER -->
+	<footer>
+		<div>
+			Copyright&nbsp;&#xA9&nbsp;<span id="copyright_year"></span>
+			James&nbsp;Percival
+		</div>
+	</footer>
+	<!-- END FOOTER -->
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+/* Standard colours */
+
+:root {
+	--green1: #060;
+	--green2: #070;
+	--green3: #090;
+	--green4: #2c2;
+
+	--white1: #eee;
+	--white2: #fdfdfd;
+	--white3: #fefefe;
+}

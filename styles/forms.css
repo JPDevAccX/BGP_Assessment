@@ -1,0 +1,110 @@
+/* Form styles */
+
+:root {
+	--form-gap: 1.4em;
+	--form-max-width: 800px;
+	--form-font-size: 120%;
+	--form-font-family: sans-serif;
+	--form-title-text-color: #444;
+	--form-label-text-color: #333;
+	--form-input-height: 28px;
+	--form-input-border-color: #ddd;
+	--form-input-border-color-error: #ebb;
+	--form-validation-error-font-size: 75%;
+	--form-validation-error-text-color: red;
+	--form-input-border-color-focus: #77f;
+	--submit-button-bg-color: rgb(82, 190, 82);
+	--submit-button-bg-gradient: linear-gradient(4deg, rgb(80, 180, 80) 0%, rgb(85, 200, 85) 100%);
+	--submit-button-border-color: green;
+	--submit-button-font-size: 130%;
+	--submit-button-letter-spacing: 0.105em;
+	--submit-button-border-color: #0a0;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--form-gap);
+	max-width: var(--form-max-width);
+	margin: 0 auto 2em auto;
+	font-size: var(--form-font-size);
+	font-family: var(--form-font-family);
+	user-select: none;
+}
+
+.form>h1 {
+	color: var(--form-title-text-color);
+}
+
+.form-field {
+	display: flex;
+	column-gap: 1em;
+	row-gap: 0.2em;
+}
+
+.form-field>label {
+	width: 10em;
+	text-align: right;
+	align-self: center;
+	color: var(--form-label-text-color);
+	font-weight: bold;
+}
+
+.input-wrapper {
+	width: 100%;
+	height: var(--form-input-height); /* Validation errors displayed in overflow */
+}
+
+.form-field input {
+	width: 100%;
+	height: var(--form-input-height);
+	font-size: inherit;
+	border: 2px solid var(--form-input-border-color);
+	outline: none;
+	font-family: inherit;
+}
+
+.form-field .validation-error-input {
+	border: 2px solid var(--form-input-border-color-error);
+}
+
+.validation-error {
+	margin-top: 1px;
+	font-size: var(--form-validation-error-font-size);
+	font-weight: bold;
+	color: var(--form-validation-error-text-color);
+}
+
+@media only screen and (max-width: 639px) {
+	.form-field {
+		flex-direction: column;
+	}
+
+	.form-field>label {
+		align-self: flex-start;
+		text-align: left;
+	}
+}
+
+.form-field input:focus {
+	border: 3px solid var(--form-input-border-color-focus);
+}
+
+.form-submit-button {
+	display: block;
+	width: 120px;
+	padding: 4px 8px;
+	margin: auto;
+	background: var(--submit-button-bg-color);
+	background: var(--submit-button-bg-gradient);
+	border-color: var(--submit-button-border-color);
+	font-size: var(--submit-button-font-size);
+	letter-spacing: var(--submit-button-letter-spacing);
+	border: 1px solid var(--submit-button-border-color);
+	border-radius: 16px;
+}
+
+.form-submit-button:hover {
+	scale: 105%;
+	filter: drop-shadow(1px 1px 1px #0008);
+}
