@@ -1,22 +1,26 @@
 "use strict";
-// (Must be loaded as a script prior to "signup.js")
+/* === NORMALISATION AND VALIDATION ===
+(Must be loaded as a script prior to "signup.js")
+*/
 
 /**
  * Set up validation and submission handling for the given form element
  * 
  * @param {HTMLFormElement}    formEl          -- Form element to process
  * @param {HTMLButtonElement}  submitButtonEl  -- Form submission button element
- * @param {object}             jsValidators    -- Arrays of validation functions keyed by field name
+ * @param {object}             jsNormalisers   -- Arrays of normalisation funcs, keyed by field name
+ * @param {object}             jsValidators    -- Arrays of validation funcs keyed by field name
  * @param {function}           submitCallback  -- Callback if validation passes 
  */
-function setupFormValidation(formEl, submitButtonEl, jsValidators, submitCallback) {
+function setupFormValidation(formEl, submitButtonEl, jsNormalisers, jsValidators, submitCallback) {
 	const formInputEls = formEl.querySelectorAll('input');
 	submitButtonEl.addEventListener('click', () => {
-		const errors = validateFormFields(formInputEls, jsValidators);
+		const normalisedFormValues = normaliseFormFields(formInputEls, jsNormalisers);
+		const errors = validateFormFields(formInputEls, normalisedFormValues, jsValidators);
 		if (errors) {
 			displayErrors(errors);
 		} else {
-			submitCallback();
+			submitCallback(normalisedFormValues);
 		}
 	});
 
@@ -26,18 +30,40 @@ function setupFormValidation(formEl, submitButtonEl, jsValidators, submitCallbac
 }
 
 /**
+ * Get normalised values for the given form input elements
+ * 
+ * @param   {NodeListOf<HTMLInputElement>}  formInputEls          -- Form input elements to process
+ * @param   {object}                        jsNormalisers         -- Arrays of normalisation funcs, keyed by field name
+ * @returns {object}                        normalisedFormValues  -- Values after normalisation, keyed by field name
+ */
+function normaliseFormFields(formInputEls, jsNormalisers) {
+	const normalisedFormValues = {};
+	for (const formInputEl of formInputEls) {
+		const [fieldName, fieldValue] = [formInputEl.name, formInputEl.value];
+		normalisedFormValues[fieldName] = fieldValue ;
+
+		// Process field value with each normalisation function in turn
+		for (const normaliserFunc of jsNormalisers[fieldName] ?? []) {
+			normalisedFormValues[fieldName] = normaliserFunc(normalisedFormValues[fieldName]) ;
+		}
+	}
+	return normalisedFormValues ;
+}
+
+/**
  * Validate the given form input elements
  * Checks HTML5 validity status first then runs the specified javascript validation functions in turn
  * Note: We only return the first error for each field
  * 
- * @param   {NodeListOf<HTMLInputElement>}  formInputEls  -- Form input elements to check
- * @param   {object}                        jsValidators  -- Arrays of validation functions keyed by field name
- * @returns {object}                        errors        -- Error message for each invalid field, keyed by field name
+ * @param   {NodeListOf<HTMLInputElement>}  formInputEls          -- Form input elements to check
+ * @param   {object}                        normalisedFormValues  -- Values after normalisation, keyed by field name
+ * @param   {object}                        jsValidators          -- Arrays of validation funcs, keyed by field name
+ * @returns {object}                        errors                -- Error for each invalid field, keyed by field name
  */
-function validateFormFields(formInputEls, jsValidators) {
+function validateFormFields(formInputEls, normalisedFormValues, jsValidators) {
 	const errors = {};
 	for (const formInputEl of formInputEls) {
-		const [fieldName, fieldValue] = [formInputEl.name, formInputEl.value];
+		const fieldName = formInputEl.name ;
 		const validityState = formInputEl.validity;
 		// Check the HTML5 validation state first as that covers the most basic rules
 		if (!validityState.valid) {
@@ -45,6 +71,7 @@ function validateFormFields(formInputEls, jsValidators) {
 		} else {
 			// HTML5 validation passed so check against the javascript validators
 			if (jsValidators[fieldName]) {
+				const fieldValue = normalisedFormValues[fieldName] ;
 				for (const validatorFunc of jsValidators[fieldName]) {
 					const error = validatorFunc(fieldValue);
 					if (error) {
@@ -87,33 +114,57 @@ function setValidationStatus(inputEl, errorStr) {
 	}
 }
 
-// ============ Validation functions ============
+// ============ Normalisation functions ============
 
 /**
- * Validate that an e-mail address is in one of the allowed domains
+ * Normalise the domain name to lowercase in the given email address
  * 
- * @param  {string}       emailAddr   -- Email address to validate
- * @param  {...string}    domainList  -- List of allowed domains
- * @return {string|null}  errorStr    -- Error string if validation fails, otherwise null
+ * @param  {string}  emailAddr  -- Email address to normalise
+ * @return {string}  emailAddr  -- Address after normalisation
  */
-function hasEmailDomain(emailAddr, ...domainList) {
-	for (const domain of domainList) {
-		const re = "^.*@" + domain + "$";
-		const regexp = new RegExp(re, "i");
-		if (emailAddr.match(regexp)) {
-			return null;
-		}
-	}
-	return "Must be " + domainList.map(domain => "@" + domain).join(" or ");
+function convertEmailDomainToLC(emailAddr) {
+	const segs = emailAddr.split('@');
+	if (segs.length < 2) return emailAddr ;
+	return segs.slice(0, segs.length - 1).join('@') + '@' + (segs[segs.length - 1].toLowerCase()) ;
 }
 
 /**
- * Validate that a string with all spaces removed doesn't exceed the maximum allowed length
+ * Remove all spaces in the given string
  * 
- * @param  {string}       value     -- Value to validate
- * @param  {number}       maxLen    -- Maximum length with spaces removed
+ * @param  {string}  value  -- String to process
+ * @return {string}  value  -- String with all spaces removed
+ */
+function removeAllSpaces(value) {
+	return value.replaceAll(' ', '');
+}
+
+// ============ Validation functions ============
+
+/**
+ * Validate that a string ends in one of a set of postfixes
+ * 
+ * @param  {string}       value        -- String to validate
+ * @param  {...string}    postfixList  -- List of allowed postfixes
+ * @return {string|null}  errorStr     -- Error string if validation fails, otherwise null
+ */
+function endsIn(value, ...postfixList) {
+	for (const postfix of postfixList) {
+		const re = postfix + "$";
+		const regexp = new RegExp(re);
+		if (value.match(regexp)) {
+			return null;
+		}
+	}
+	return "Must end in " + postfixList.join(" or ");
+}
+
+/**
+ * Validate that a string doesn't exceed the maximum allowed length
+ * 
+ * @param  {string}       value     -- String to validate
+ * @param  {number}       maxLen    -- Maximum length
  * @return {string|null}  errorStr  -- Error string if validation fails, otherwise null
  */
-function isWithinMaxLenWithoutSpaces(value, maxLen) {
-	return (value.replaceAll(' ', '').length <= maxLen ? null : `Must be maximum of ${maxLen} characters`);
+function isMaxLen(value, maxLen) {
+	return (value.length <= maxLen) ? null : `Must be maximum of ${maxLen} characters`;
 }
