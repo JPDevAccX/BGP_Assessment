@@ -52,7 +52,8 @@
 
 .input-wrapper {
 	width: 100%;
-	height: var(--form-input-height); /* Validation errors displayed in overflow */
+	height: var(--form-input-height);
+	/* Validation errors displayed in overflow */
 }
 
 .form-field input {
@@ -104,7 +105,7 @@
 	border-radius: 16px;
 }
 
-.form-submit-button:hover {
+.form-submit-button:hover:not(:active) {
 	scale: 105%;
 	filter: drop-shadow(1px 1px 1px #0008);
 }
