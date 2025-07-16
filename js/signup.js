@@ -4,20 +4,27 @@
 // Setup for account form validation / submission
 const submitButtonEl = document.querySelector('.form-submit-button');
 const formEl = document.querySelector('.form');
-const jsValidators = {
-	'email': [(value) => hasEmailDomain(value, 'gmail.com', 'outlook.com')],
-	'phone': [(value) => isWithinMaxLenWithoutSpaces(value, 11)]
+const jsNormalisers = {
+	'name': [(value) => value.trim()],
+	'email': [(value) => convertEmailDomainToLC(value)],
+	'phone': [(value) => removeAllSpaces(value, 11)],
+	'postcode': [(value) => value.trim(), (value) => value.toUpperCase()]
 };
-setupFormValidation(formEl, submitButtonEl, jsValidators, submitForm)
+const jsValidators = {
+	'email': [(value) => endsIn(value, '@gmail.com', '@outlook.com')],
+	'phone': [(value) => isMaxLen(value, 11)]
+};
+setupFormValidation(formEl, submitButtonEl, jsNormalisers, jsValidators, submitForm)
 
 /**
  * Submission handler (just logs the form values to the console and displays them in an alert)
+ * 
+ * @param {object}  normalisedFormValues  -- Values after normalisation, keyed by field name
  */
-function submitForm() {
-	console.info("Submitting form...");
-	let alertStr = "Submitting form...\n";
-	const formData = new FormData(formEl);
-	for (const [fieldName, fieldValue] of formData.entries()) {
+function submitForm(normalisedFormValues) {
+	console.info("Submitting form (with normalised values)...");
+	let alertStr = "Submitting form (with normalised values)...\n";
+	for (const [fieldName, fieldValue] of Object.entries(normalisedFormValues)) {
 		const str = `${fieldName}: ${fieldValue}`;
 		console.info(str);
 		alertStr += str + "\n";
