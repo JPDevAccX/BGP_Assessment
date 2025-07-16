@@ -15,3 +15,12 @@ for (const el of elsWithPlaceholders) {
 		el.placeholder = el.dataset.placeholder;
 	});
 }
+
+// Hamburger button handling
+const headerBottomListEl = document.querySelector('.header-bottom ul') ;
+document.addEventListener('click', (e) => {
+	// Toggle if hamburger button clicked OR for any click if the menu is currently open
+	if (e.target.closest('#hamburger_button') || !headerBottomListEl.classList.contains('mobile-closed')) {
+		headerBottomListEl.classList.toggle('mobile-closed') ;
+	}
+}) ;
