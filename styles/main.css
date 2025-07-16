@@ -7,7 +7,7 @@
 	--header-logo-font-size: 120%;
 	--header-bottom-height: 64px;
 	--header-bottom-bg-color: var(--green1);
-	--header-bottom-font-size: 125%;
+	--header-bottom-font-size: min(125%, 4.5vw);
 	--search-bar-height: 75%;
 	--search-bar-font-size: min(120%, 4vw);
 	--search-bar-border-color: var(--green1);
@@ -118,7 +118,6 @@ body {
 }
 
 .header-bottom {
-	position: relative;
 	height: var(--header-bottom-height);
 	background-color: var(--header-bottom-bg-color);
 	font-size: var(--header-bottom-font-size);
@@ -135,41 +134,11 @@ body {
 	padding: 6px;
 	margin: 0;
 	list-style: none;
-	background-color: inherit;
-}
-
-@media only screen and (max-width: 479px) {
-	.header-bottom {
-		height: 40px;
-	}
-	.header-bottom>ul {
-		height:fit-content;
-		flex-direction: column;
-	}
-	.header-bottom>ul.mobile-closed {
-		display: none;
-	}
 }
 
 .header-bottom>ul>li:hover {
 	scale: 110%;
 	filter: drop-shadow(2px 2px 4px #0008);
-}
-
-.hamburger-button {
-	position: absolute;
-	top: 4px;
-	right: 0;
-	width: 40px;
-	height: 32px;
-	border: none;
-	background-color: inherit;
-}
-
-@media only screen and (min-width: 480px) {
-	.hamburger-button {
-		display: none;
-	}
 }
 
 main {
