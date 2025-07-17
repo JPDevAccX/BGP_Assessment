@@ -15,8 +15,10 @@
 	--search-bar-button-bg-color: var(--green4);
 	--search-bar-button-bg-color-hover: var(--green5);
 	--footer-bg-color: var(--green1);
-	--footer-font-size: 140%;
-	--footer-text-color: var(--white2);
+	--footer-copyright-font-size: 140%;
+	--footer-copyright-text-color: var(--white2);
+	--footer-attributions-font-size: 90%;
+	--footer-attributions-text-color: var(--white1);
 }
 
 * {
@@ -181,7 +183,23 @@ footer {
 	min-height: 64px;
 	padding: 0.5em;
 	background-color: var(--footer-bg-color);
-	color: var(--footer-text-color);
-	font-size: var(--footer-font-size);
 	user-select: none;
+}
+
+.copyright {
+	font-size: var(--footer-copyright-font-size);
+	color: var(--footer-copyright-text-color);
+	margin-bottom: 0.5em;
+}
+
+.attributions {
+	font-size: var(--footer-attributions-font-size);
+	color: var(--footer-attributions-text-color) ;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.attributions a {
+	color: inherit;
 }
