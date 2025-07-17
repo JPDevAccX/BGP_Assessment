@@ -38,8 +38,8 @@ The form must have the following validation:
 - **Can be left empty.**
 
 **Email Address**  
-- **Is case insensitive (as they're normally treated as such by mail servers).**
 - **Should end in "@gmail.com" or "@outlook.com" (so we wouldn't accept e.g. someone@bigmail.com).**
+- **The above domain name check should be case insensitive**
 - **Must be specified.**
 
 **Phone**  
@@ -49,7 +49,7 @@ The form must have the following validation:
 **Postcode**
 - **Can be left empty.**
 
-**To better conform with the above requirements however I've added a normalisation stage as well.**  
+**To better conform with the above requirements however I've added a normalisation step as well.**  
 **(so e.g. the final phone number is stripped of the spaces).**
 
 If either of these points fail, the form is not submitted, and an error message is shown explaining
