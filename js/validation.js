@@ -157,7 +157,7 @@ function endsIn(value, ...postfixList) {
 			return null;
 		}
 	}
-	return "Must end in " + postfixList.join(" or ");
+	return "Must end in " + postfixList.join(", ");
 }
 
 /**
