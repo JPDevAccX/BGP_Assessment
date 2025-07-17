@@ -1,4 +1,4 @@
-/* Main webpage styles (header / footer) */
+/* Main webpage styles */
 
 :root {
 	--header-top-height: 64px;
@@ -30,6 +30,9 @@ img {
 }
 
 body {
+	/* We make the entire HTML body element a column-oriented flexbox with a min height matching that of the viewport.
+	This allows us to set the main content child element to grow automatically and push the footer down
+	to the bottom of the viewport if required. */
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
@@ -65,7 +68,6 @@ body {
 
 .search-bar {
 	display: flex;
-	align-items: center;
 	flex-grow: 0.5;
 	height: var(--search-bar-height);
 }
@@ -85,7 +87,7 @@ body {
 	outline: none;
 }
 
-.search-bar button {
+.search-bar>button {
 	width: 40px;
 	height: 100%;
 	padding: 4px 6px 4px 4px;
@@ -94,7 +96,7 @@ body {
 	background-color: var(--search-bar-button-bg-color);
 }
 
-.search-bar button:hover:not(:active) {
+.search-bar>button:hover:not(:active) {
 	background-color: var(--search-bar-button-bg-color-hover);
 }
 
@@ -116,6 +118,7 @@ body {
 }
 
 .header-bottom {
+	/* Make the header navbar a positioned element for the absolute positioning of the hamburger button below */
 	position: relative;
 	height: var(--header-bottom-height);
 	background-color: var(--header-bottom-bg-color);
@@ -157,6 +160,7 @@ body {
 }
 
 .hamburger-button {
+	/* Hamburger button positioned absolutely to the top right within the header navbar */
 	position: absolute;
 	top: 4px;
 	right: 0;
@@ -174,6 +178,7 @@ body {
 
 main {
 	margin: 8px;
+	/* Set the main content element to grow vertically as needed to push the footer to the bottom */
 	flex-grow: 1;
 }
 
@@ -194,7 +199,7 @@ footer {
 
 .attributions {
 	font-size: var(--footer-attributions-font-size);
-	color: var(--footer-attributions-text-color) ;
+	color: var(--footer-attributions-text-color);
 	list-style: none;
 	margin: 0;
 	padding: 0;
