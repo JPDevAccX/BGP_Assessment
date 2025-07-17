@@ -22,7 +22,7 @@
 	--submit-button-border-color: #0a0;
 }
 
-input:not([placeholder=""]) {
+::placeholder {
 	color: var(--input-placeholder-color);
 }
 
