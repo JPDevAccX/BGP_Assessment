@@ -1,6 +1,8 @@
 "use strict";
 /* === NORMALISATION AND VALIDATION ===
 (Must be loaded as a script prior to "signup.js")
+Note: Normally it'd be better to make this a module and export the required functions in order to avoid global namespace
+pollution. However, avoiding the use of modules allows us to view the site directly with the "file://" protocol.
 */
 
 /**
@@ -9,8 +11,8 @@
  * @param {HTMLFormElement}    formEl          -- Form element to process
  * @param {HTMLButtonElement}  submitButtonEl  -- Form submission button element
  * @param {object}             jsNormalisers   -- Arrays of normalisation funcs, keyed by field name
- * @param {object}             jsValidators    -- Arrays of validation funcs keyed by field name
- * @param {function}           submitCallback  -- Callback if validation passes 
+ * @param {object}             jsValidators    -- Arrays of validation funcs, keyed by field name
+ * @param {function}           submitCallback  -- Function to call if validation passes
  */
 function setupFormValidation(formEl, submitButtonEl, jsNormalisers, jsValidators, submitCallback) {
 	const formInputEls = formEl.querySelectorAll('input');
@@ -40,14 +42,14 @@ function normaliseFormFields(formInputEls, jsNormalisers) {
 	const normalisedFormValues = {};
 	for (const formInputEl of formInputEls) {
 		const [fieldName, fieldValue] = [formInputEl.name, formInputEl.value];
-		normalisedFormValues[fieldName] = fieldValue ;
+		normalisedFormValues[fieldName] = fieldValue;
 
 		// Process field value with each normalisation function in turn
 		for (const normaliserFunc of jsNormalisers[fieldName] ?? []) {
-			normalisedFormValues[fieldName] = normaliserFunc(normalisedFormValues[fieldName]) ;
+			normalisedFormValues[fieldName] = normaliserFunc(normalisedFormValues[fieldName]);
 		}
 	}
-	return normalisedFormValues ;
+	return normalisedFormValues;
 }
 
 /**
@@ -63,7 +65,7 @@ function normaliseFormFields(formInputEls, jsNormalisers) {
 function validateFormFields(formInputEls, normalisedFormValues, jsValidators) {
 	const errors = {};
 	for (const formInputEl of formInputEls) {
-		const fieldName = formInputEl.name ;
+		const fieldName = formInputEl.name;
 		const validityState = formInputEl.validity;
 		// Check the HTML5 validation state first as that covers the most basic rules
 		if (!validityState.valid) {
@@ -71,7 +73,7 @@ function validateFormFields(formInputEls, normalisedFormValues, jsValidators) {
 		} else {
 			// HTML5 validation passed so check against the javascript validators
 			if (jsValidators[fieldName]) {
-				const fieldValue = normalisedFormValues[fieldName] ;
+				const fieldValue = normalisedFormValues[fieldName];
 				for (const validatorFunc of jsValidators[fieldName]) {
 					const error = validatorFunc(fieldValue);
 					if (error) {
@@ -119,20 +121,20 @@ function setValidationStatus(inputEl, errorStr) {
 /**
  * Normalise the domain name to lowercase in the given email address
  * 
- * @param  {string}  emailAddr  -- Email address to normalise
- * @return {string}  emailAddr  -- Address after normalisation
+ * @param   {string}  emailAddr  -- Email address to normalise
+ * @returns {string}  emailAddr  -- Address after normalisation
  */
 function convertEmailDomainToLC(emailAddr) {
 	const segs = emailAddr.split('@');
-	if (segs.length < 2) return emailAddr ;
-	return segs.slice(0, segs.length - 1).join('@') + '@' + (segs[segs.length - 1].toLowerCase()) ;
+	if (segs.length < 2) return emailAddr;
+	return segs.slice(0, segs.length - 1).join('@') + '@' + (segs[segs.length - 1].toLowerCase());
 }
 
 /**
  * Remove all spaces in the given string
  * 
- * @param  {string}  value  -- String to process
- * @return {string}  value  -- String with all spaces removed
+ * @param   {string}  value  -- String to process
+ * @returns {string}  value  -- String with all spaces removed
  */
 function removeAllSpaces(value) {
 	return value.replaceAll(' ', '');
@@ -143,9 +145,9 @@ function removeAllSpaces(value) {
 /**
  * Validate that a string ends in one of a set of postfixes
  * 
- * @param  {string}       value        -- String to validate
- * @param  {...string}    postfixList  -- List of allowed postfixes
- * @return {string|null}  errorStr     -- Error string if validation fails, otherwise null
+ * @param   {string}       value        -- String to validate
+ * @param   {...string}    postfixList  -- List of allowed postfixes
+ * @returns {string|null}  errorStr     -- Error string if validation fails, otherwise null
  */
 function endsIn(value, ...postfixList) {
 	for (const postfix of postfixList) {
@@ -161,9 +163,9 @@ function endsIn(value, ...postfixList) {
 /**
  * Validate that a string doesn't exceed the maximum allowed length
  * 
- * @param  {string}       value     -- String to validate
- * @param  {number}       maxLen    -- Maximum length
- * @return {string|null}  errorStr  -- Error string if validation fails, otherwise null
+ * @param   {string}       value     -- String to validate
+ * @param   {number}       maxLen    -- Maximum length
+ * @returns {string|null}  errorStr  -- Error string if validation fails, otherwise null
  */
 function isMaxLen(value, maxLen) {
 	return (value.length <= maxLen) ? null : `Must be maximum of ${maxLen} characters`;
