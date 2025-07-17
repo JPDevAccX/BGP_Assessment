@@ -39,7 +39,7 @@ The form must have the following validation:
 
 **Email Address**  
 - **Should end in "@gmail.com" or "@outlook.com" (so we wouldn't accept e.g. someone@bigmail.com).**
-- **The above domain name check should be case insensitive**
+- **The above domain name check should be case insensitive.**
 - **Must be specified.**
 
 **Phone**  
