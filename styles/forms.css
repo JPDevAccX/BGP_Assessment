@@ -1,6 +1,7 @@
 /* Form styles */
 
 :root {
+	--input-placeholder-color: var(--mid-gray);
 	--form-gap: 1.4em;
 	--form-max-width: 800px;
 	--form-font-size: 120%;
@@ -10,15 +11,19 @@
 	--form-input-height: 28px;
 	--form-input-border-color: #ddd;
 	--form-input-border-color-error: #ebb;
+	--form-input-border-color-focus: #77f;
 	--form-validation-error-font-size: 75%;
 	--form-validation-error-text-color: red;
-	--form-input-border-color-focus: #77f;
 	--submit-button-bg-color: rgb(82, 190, 82);
 	--submit-button-bg-gradient: linear-gradient(4deg, rgb(80, 180, 80) 0%, rgb(85, 200, 85) 100%);
 	--submit-button-border-color: green;
 	--submit-button-font-size: 130%;
 	--submit-button-letter-spacing: 0.105em;
 	--submit-button-border-color: #0a0;
+}
+
+input:not([placeholder=""]) {
+	color: var(--input-placeholder-color);
 }
 
 .form {
@@ -69,6 +74,10 @@
 	border: 2px solid var(--form-input-border-color-error);
 }
 
+.form-field input:focus {
+	border: 3px solid var(--form-input-border-color-focus);
+}
+
 .validation-error {
 	margin-top: 1px;
 	font-size: var(--form-validation-error-font-size);
@@ -87,18 +96,13 @@
 	}
 }
 
-.form-field input:focus {
-	border: 3px solid var(--form-input-border-color-focus);
-}
-
 .form-submit-button {
 	display: block;
 	width: 120px;
 	padding: 4px 8px;
 	margin: auto;
-	background: var(--submit-button-bg-color);
+	background: var(--submit-button-bg-color); /* fallback */
 	background: var(--submit-button-bg-gradient);
-	border-color: var(--submit-button-border-color);
 	font-size: var(--submit-button-font-size);
 	letter-spacing: var(--submit-button-letter-spacing);
 	border: 1px solid var(--submit-button-border-color);
