@@ -1,7 +1,9 @@
 "use strict";
-// (Must be loaded as a module or deferred script so that we don't have to worry about the "DOMContentLoaded" event)
+/* === SIGNUP FORM HANDLING ===
+(Must be loaded as a module or deferred script so that we don't have to worry about the "DOMContentLoaded" event)
+*/
 
-// Setup for account form validation / submission
+// Setup for account form normalisation / validation / submission
 const submitButtonEl = document.querySelector('.form-submit-button');
 const formEl = document.querySelector('.form');
 const jsNormalisers = {
